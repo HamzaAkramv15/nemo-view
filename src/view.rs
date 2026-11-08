@@ -749,15 +749,18 @@ fn bar(ui: &mut Ui, v: &V, w: i32, h: i32) {
         ui.cv.text_center(ui.f, PX, hr, hint, t.text_dim);
         return;
     }
-    let n_sep = BAR.iter().filter(|b| b.0 == "|").count() as i32;
-    let n_btn = BAR.len() as i32 - n_sep;
+    // без шелла и своей команды «сделать обоями» делать нечем
+    let can_wall = v.look.can_set_wallpaper();
+    let bar: Vec<&(&str, &str)> = BAR.iter().filter(|b| b.1 != "wall" || can_wall).collect();
+    let n_sep = bar.iter().filter(|b| b.0 == "|").count() as i32;
+    let n_btn = bar.len() as i32 - n_sep;
     let tw = 12 + n_btn * (bs + 2) + n_sep * 11;
     let r = R::new((w - tw) / 2, h - 58, tw, 44);
     ui.cv.pxbox(r, &BoxStyle::new(t.panel.alpha(0.96), t.border.lerp(t.red, 0.5)).shadow(4));
     ui.zone(r, Act::Block, Cur::Default);
     let edited = v.pic().map(|p| p.edited).unwrap_or(false);
     let mut x = r.x + 6;
-    for (icon, a) in BAR {
+    for (icon, a) in bar.iter().copied() {
         if *icon == "|" {
             ui.cv.fill(R::new(x + 4, r.y + 12, 1, 20), t.border);
             x += 11;
