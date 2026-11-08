@@ -5,10 +5,11 @@
 ## Установка
 
 ```sh
-./install.sh
+chmod +x yami-view
+./yami-view install
 ```
 
-Нужен Rust 1.89 или новее, root не нужен. Ставится в `~/.local`. `./install.sh --deps` — что нужно от системы, `./install.sh --uninstall` — удалить.
+Один файл, без Rust и root. `install` спросит настройки, покажет, что изменит, и поставит в `~/.local` только после твоего «да» (`--yes` без вопросов, `--all` ещё и включает все опции). `./yami-view deps` — что нужно от системы, `./yami-view uninstall` — удалить. Собрать самому: Rust 1.89 или новее, `cargo build --release --locked`, затем `target/release/yami-view install`.
 
 ## Как пользоваться
 
