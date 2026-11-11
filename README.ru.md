@@ -84,7 +84,7 @@ yami-view shot -o ПАПКА     # окно в PNG без Wayland
 | `font`, `fontView` | семейство шрифта для всех программ или только для этой |
 | `animations`, `animSpeed` | вкл/выкл; их длительность (0.5 быстро, 2 медленно) |
 | `colors` | любой из `bg panel surface surfaceHi codeBg border dim accent deep glow bright selection text textDim textFaint onAccent textHi ok warn` |
-| `lang` | `ru`, `en`, `pt-BR`; пусто — как в системе |
+| `lang` | `ru`, `en`, `pt-BR`, `es`, `de`, `fr`, `uk`, `pl`; пусто — как в системе |
 | `wallpaperCmd` | команда «сделать обоями», см. выше |
 
 Например, пиксельный вид в янтаре: `{ "preset": "yami", "palette": "amber" }`, или нейтральный

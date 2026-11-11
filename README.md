@@ -84,7 +84,7 @@ restyles itself the moment you save them:
 | `font`, `fontView` | a font family for every program, or for this one |
 | `animations`, `animSpeed` | on or off; their length (0.5 fast, 2 slow) |
 | `colors` | any of `bg panel surface surfaceHi codeBg border dim accent deep glow bright selection text textDim textFaint onAccent textHi ok warn` |
-| `lang` | `ru`, `en`, `pt-BR`; empty: as the system |
+| `lang` | `ru`, `en`, `pt-BR`, `es`, `de`, `fr`, `uk`, `pl`; empty: as the system |
 | `wallpaperCmd` | the «set as wallpaper» command, see above |
 
 For example the pixel look in amber: `{ "preset": "yami", "palette": "amber" }`, or a neutral light

@@ -918,7 +918,7 @@ checksum = "ec7a2a501ed189703dba8b08142f057e887dfc4b2cc4db2d343ac6376ba3e0b9"
 [[package]]
 name = "yami-px"
 version = "3.0.0"
-source = "git+https://github.com/Trendorin/yami?tag=px-v3.0.0#57042ca36d29bebfd30f88307dee483af639ce88"
+source = "git+https://github.com/Trendorin/yami?tag=px-v3.0.0#862e9adac9b8f6cd972f096fe5f46207d16451c0"
 dependencies = [
  "ab_glyph",
  "image",
