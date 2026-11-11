@@ -5,7 +5,8 @@ use crate::gfx::Img;
 use image::{AnimationDecoder, RgbaImage};
 use std::path::{Path, PathBuf};
 
-pub const EXTS: &[&str] = &["png", "jpg", "jpeg", "jpe", "gif", "webp", "bmp", "ico", "tga", "tif", "tiff", "pnm", "ppm", "qoi"];
+// только то, что умеет декодер (фичи image в Cargo.toml): файл из списка, который не открыть, — хуже его отсутствия
+pub const EXTS: &[&str] = &["png", "jpg", "jpeg", "jpe", "gif", "webp", "bmp", "ico", "tga", "pnm", "pbm", "pgm", "ppm"];
 
 pub fn is_image(p: &Path) -> bool {
     p.extension().map(|e| EXTS.contains(&e.to_string_lossy().to_lowercase().as_str())).unwrap_or(false)
@@ -173,4 +174,29 @@ pub fn human(n: u64) -> String {
         i += 1;
     }
     if i == 0 { format!("{n} {}", u[0]) } else { format!("{v:.1} {}", u[i]) }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // каждое расширение из EXTS открывается: список и фичи image в Cargo.toml не расходятся
+    #[test]
+    fn every_listed_extension_opens() {
+        let dir = std::env::temp_dir().join(format!("yami-view-ext-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let img = image::DynamicImage::ImageRgb8(image::RgbImage::from_fn(4, 4, |x, y| image::Rgb([x as u8 * 60, y as u8 * 60, 90])));
+        for ext in EXTS {
+            let fmt = match *ext {
+                "jpe" => image::ImageFormat::Jpeg,
+                e => image::ImageFormat::from_extension(e).unwrap_or_else(|| panic!("{e}: unknown to image")),
+            };
+            let p = dir.join(format!("t.{ext}"));
+            // в настоящем ICO PNG всегда с альфой: декодер другого не берёт
+            let img = if fmt == image::ImageFormat::Ico { image::DynamicImage::ImageRgba8(img.to_rgba8()) } else { img.clone() };
+            img.save_with_format(&p, fmt).unwrap_or_else(|e| panic!("{ext}: {e}"));
+            if let Err(e) = load(&p) { panic!("{ext} does not open: {e}") }
+        }
+        let _ = std::fs::remove_dir_all(&dir);
+    }
 }
