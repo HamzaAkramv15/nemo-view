@@ -45,6 +45,7 @@ const DE: &[(&str, &str)] = &[
     ("smaller · −", "kleiner · −"),
     ("the wallpaper changes in a second", "der Hintergrund wechselt gleich"),
     ("transparency", "Transparenz"),
+    ("trash is not available", "Papierkorb nicht verfügbar"),
     ("yes", "ja"),
     ("{} frames", "{} Bilder"),
 ];

@@ -45,6 +45,7 @@ const ES: &[(&str, &str)] = &[
     ("smaller · −", "más pequeño · −"),
     ("the wallpaper changes in a second", "el fondo cambia en un segundo"),
     ("transparency", "transparencia"),
+    ("trash is not available", "la papelera no está disponible"),
     ("yes", "sí"),
     ("{} frames", "{} fotogramas"),
 ];

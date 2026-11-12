@@ -129,40 +129,14 @@ pub fn save(pic: &Pic, to: &Path) -> Result<(), String> {
     std::fs::rename(&tmp, to).map_err(|e| e.to_string())
 }
 
-/// в корзину freedesktop (домашняя; файл на другом диске — в .Trash-uid его точки монтирования)
+/// в корзину freedesktop: общая с yami-files (yami_px::trash: своя корзина на чужом диске — только
+/// настоящая папка 0700, запись о файле создаётся первой и атомарно)
 pub fn trash(p: &Path) -> Result<(), String> {
-    use std::os::unix::fs::MetadataExt;
-    let home_t = crate::paths::data_dir().join("Trash");
-    let same = std::fs::metadata(crate::paths::data_dir()).map(|m| m.dev()).ok() == std::fs::metadata(p).map(|m| m.dev()).ok();
-    let t = if same {
-        home_t
-    } else {
-        let dev = std::fs::metadata(p).map_err(|e| e.to_string())?.dev();
-        let mut top = p.to_path_buf();
-        while let Some(par) = top.parent() {
-            if std::fs::metadata(par).map(|m| m.dev()).ok() != Some(dev) {
-                break;
-            }
-            top = par.to_path_buf();
-        }
-        top.join(format!(".Trash-{}", unsafe { libc::getuid() }))
-    };
-    std::fs::create_dir_all(t.join("files")).map_err(|e| e.to_string())?;
-    std::fs::create_dir_all(t.join("info")).map_err(|e| e.to_string())?;
-    let name = p.file_name().map(|s| s.to_string_lossy().to_string()).unwrap_or_default();
-    let mut n = 1;
-    let mut target = name.clone();
-    while t.join("files").join(&target).exists() || t.join("info").join(format!("{target}.trashinfo")).exists() {
-        n += 1;
-        target = format!("{n}-{name}");
+    match yami_px::trash::put(p) {
+        Ok(_) => Ok(()),
+        Err(yami_px::trash::PutErr::NoTrash) => Err(crate::i18n::tr("корзина недоступна").to_string()),
+        Err(yami_px::trash::PutErr::Io(e)) => Err(e.to_string()),
     }
-    let mut tm: libc::tm = unsafe { std::mem::zeroed() };
-    let now = unsafe { libc::time(std::ptr::null_mut()) };
-    unsafe { libc::localtime_r(&now, &mut tm) };
-    let enc: String = p.to_string_lossy().bytes().map(|b| if b.is_ascii_alphanumeric() || b"/-_.~".contains(&b) { (b as char).to_string() } else { format!("%{b:02X}") }).collect();
-    let info = format!("[Trash Info]\nPath={enc}\nDeletionDate={:04}-{:02}-{:02}T{:02}:{:02}:{:02}\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
-    std::fs::write(t.join("info").join(format!("{target}.trashinfo")), info).map_err(|e| e.to_string())?;
-    std::fs::rename(p, t.join("files").join(&target)).map_err(|e| e.to_string())
 }
 
 pub fn human(n: u64) -> String {

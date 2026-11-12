@@ -45,6 +45,7 @@ const PL: &[(&str, &str)] = &[
     ("smaller · −", "mniejsze · −"),
     ("the wallpaper changes in a second", "tapeta zmieni się za sekundę"),
     ("transparency", "kanał alfa"),
+    ("trash is not available", "kosz jest niedostępny"),
     ("yes", "tak"),
     ("{} frames", "klatek: {}"),
 ];

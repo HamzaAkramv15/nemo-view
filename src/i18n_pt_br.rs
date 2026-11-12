@@ -44,5 +44,6 @@ const PT_BR: &[(&str, &str)] = &[
     ("smaller · −", "reduzir · −"),
     ("the wallpaper changes in a second", "o papel de parede muda em um segundo"),
     ("transparency", "transparência"),
+    ("trash is not available", "a lixeira não está disponível"),
     ("yes", "sim"),
 ];

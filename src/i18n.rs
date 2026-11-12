@@ -115,6 +115,7 @@ const PAIRS: &[(&str, &str)] = &[
     ("изменений нет", "no changes"),
     ("анимацию не перезаписываю: ctrl+shift+s — сохранить как png", "not overwriting an animation: ctrl+shift+s saves a png"),
     ("в корзине", "moved to trash"),
+    ("корзина недоступна", "trash is not available"),
     ("обои поменяются через секунду", "the wallpaper changes in a second"),
     ("скопировано", "copied"),
     ("слайд-шоу: каждые 4 с", "slideshow: every 4 s"),

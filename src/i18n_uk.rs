@@ -45,6 +45,7 @@ const UK: &[(&str, &str)] = &[
     ("smaller · −", "менше · −"),
     ("the wallpaper changes in a second", "шпалери зміняться за секунду"),
     ("transparency", "прозорість"),
+    ("trash is not available", "кошик недоступний"),
     ("yes", "так"),
     ("{} frames", "кадрів: {}"),
 ];
