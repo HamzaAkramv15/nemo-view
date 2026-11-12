@@ -162,7 +162,7 @@ impl V {
             return;
         }
         if self.pic().map(|p| p.edited).unwrap_or(false) {
-            self.toast(crate::i18n::tr("правка не сохранена: ctrl+s — сохранить, ctrl+z — отменить"));
+            self.toast(crate::i18n::tr("прошлая правка не сохранена: вернись к ней — ctrl+s или ctrl+z"));
         }
         self.idx = ((self.idx as i32 + d).rem_euclid(n)) as usize;
         self.undo.clear();
@@ -278,6 +278,12 @@ impl V {
         if let Some(p) = self.undo.pop() {
             self.cache.insert(p.path.clone(), p);
             self.reset_view();
+        } else if let Some(p) = self.path().cloned().filter(|_| self.pic().is_some_and(|p| p.edited)) {
+            // к правленой вернулись с другой картинки: шагов отмены с ней не хранится (каждый — целая
+            // картинка в памяти), а несохранённая правка отменяется вся — картинка заново с диска
+            self.cache.remove(&p);
+            self.want();
+            self.toast(crate::i18n::tr("правка отменена"));
         } else {
             self.toast(crate::i18n::tr("нечего отменять"));
         }

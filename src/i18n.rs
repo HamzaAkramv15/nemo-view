@@ -109,8 +109,9 @@ include!("i18n_pl.rs");
 const PAIRS: &[(&str, &str)] = &[
     ("сохранено", "saved"),
     ("пусто", "empty"),
-    ("правка не сохранена: ctrl+s — сохранить, ctrl+z — отменить", "edit not saved: ctrl+s to save, ctrl+z to undo"),
+    ("прошлая правка не сохранена: вернись к ней — ctrl+s или ctrl+z", "the last edit is not saved: go back for ctrl+s or ctrl+z"),
     ("нечего отменять", "nothing to undo"),
+    ("правка отменена", "edit undone"),
     ("выдели область мышью", "select an area with the mouse"),
     ("изменений нет", "no changes"),
     ("анимацию не перезаписываю: ctrl+shift+s — сохранить как png", "not overwriting an animation: ctrl+shift+s saves a png"),
