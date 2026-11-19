@@ -1,5 +1,5 @@
 [package]
-name = "yami-view"
+name = "nemo-view"
 version = "3.0.0"
 edition = "2021"
 description = "Fast image viewer and quick editor for Wayland"
@@ -7,11 +7,11 @@ license = "MIT"
 publish = false
 
 [[bin]]
-name = "yami-view"
+name = "nemo-view"
 path = "src/main.rs"
 
 [dependencies]
-yami-px = { git = "https://github.com/HamzaAkramv15/nemo", tag = "px-v3.2.0", features = ["tiny5"] }
+nemo-px = { git = "https://github.com/HamzaAkramv15/nemo", tag = "px-v3.2.1", features = ["tiny5"] }
 smithay-client-toolkit = "0.20"
 wayland-client = "0.31"
 wayland-protocols = { version = "0.32", features = ["client", "staging"] }

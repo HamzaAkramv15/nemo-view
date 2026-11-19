@@ -1,8 +1,8 @@
-// yami-view — просмотрщик картинок шелла yami: мгновенно открывается, листает папку, честные
-// пиксели при увеличении, поворот/отражение/кадрирование, сохранение через диалог yami-files.
+// nemo-view — просмотрщик картинок шелла nemo: мгновенно открывается, листает папку, честные
+// пиксели при увеличении, поворот/отражение/кадрирование, сохранение через диалог nemo-files.
 //
-//   yami-view [ФАЙЛ|ПАПКА…]
-//   yami-view shot [-o ПАПКА] [--lang en]    снимки окна в PNG без Wayland
+//   nemo-view [ФАЙЛ|ПАПКА…]
+//   nemo-view shot [-o ПАПКА] [--lang en]    снимки окна в PNG без Wayland
 
 mod setup;
 mod app;
@@ -10,29 +10,30 @@ mod i18n;
 mod pic;
 mod view;
 
-pub use yami_px::{font, gfx, icons, look, paths, theme, ui};
+pub use nemo_px::{font, gfx, icons, look, paths, theme, ui};
 
 use std::path::PathBuf;
 
 fn main() {
+    nemo_px::paths::migrate_legacy();
     let args: Vec<String> = std::env::args().skip(1).collect();
-    if let Some(c) = yami_px::install::dispatch(&setup::SPEC, &args) {
+    if let Some(c) = nemo_px::install::dispatch(&setup::SPEC, &args) {
         std::process::exit(c);
     }
     match args.first().map(|s| s.as_str()) {
         Some("--version") => {
-            println!("yami-view {}", env!("CARGO_PKG_VERSION"));
+            println!("nemo-view {}", env!("CARGO_PKG_VERSION"));
             return;
         }
         Some("-h") | Some("--help") => {
-            println!("yami-view [FILE|DIR…] | install | uninstall | deps | shot [-o DIR] [--lang en]");
+            println!("nemo-view [FILE|DIR…] | install | uninstall | deps | shot [-o DIR] [--lang en]");
             return;
         }
         Some("shot") => std::process::exit(shot(&args[1..])),
         _ => {}
     }
-    // через 15 с старт позади и окно открыто: код старта — из памяти (yami_px::shed_code)
-    yami_px::shed_code_later(15);
+    // через 15 с старт позади и окно открыто: код старта — из памяти (nemo_px::shed_code)
+    nemo_px::shed_code_later(15);
     let look = look::Look::load("view");
     i18n::set(&look.lang);
     let paths: Vec<PathBuf> = args.iter().filter(|a| !a.starts_with('-')).map(|a| icons::uri_path(a).unwrap_or_else(|| PathBuf::from(a))).map(|p| if p.is_relative() { std::env::current_dir().unwrap_or_default().join(p) } else { p }).collect();
@@ -78,11 +79,11 @@ fn shot(args: &[String]) -> i32 {
     }
     i18n::set(&look.lang);
     // русская надпись без перевода — ошибка на любом языке, кроме русского; `--fit`: надписи, которым тесно
-    let audit = !matches!(yami_px::i18n::normalize(&lang), "ru" | "");
+    let audit = !matches!(nemo_px::i18n::normalize(&lang), "ru" | "");
     i18n::audit(audit);
-    yami_px::gfx::watch_text(args.iter().any(|a| a == "--fit"));
+    nemo_px::gfx::watch_text(args.iter().any(|a| a == "--fit"));
     let _ = std::fs::create_dir_all(&out);
-    let dir = std::env::temp_dir().join(format!("yami-view-shot-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("nemo-view-shot-{}", std::process::id()));
     let _ = std::fs::create_dir_all(&dir);
     // картинка: пиксель-арт 48×32 в палитре
     let t = look.theme;
@@ -130,7 +131,7 @@ fn shot(args: &[String]) -> i32 {
         let path = out.join(format!("{target}.png"));
         let _ = image::save_buffer(&path, &rgba, w as u32, h as u32, image::ColorType::Rgba8);
         println!("{}", path.display());
-        for p in yami_px::gfx::fit_report() {
+        for p in nemo_px::gfx::fit_report() {
             println!("  layout [{target}]: {p}");
             bad = 1;
         }

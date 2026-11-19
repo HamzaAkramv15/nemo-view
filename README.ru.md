@@ -1,15 +1,15 @@
-# yami-view
+# nemo-view
 
 [English](README.md) · Русский
 
 Просмотрщик и быстрый редактор картинок для Wayland: открывается сразу, листает папку, при
 увеличении показывает честные пиксели, поворачивает, отражает, кадрирует и сохраняет. Свой рендер,
-без тулкитов. Часть рабочего стола [yami](https://github.com/Trendorin/yami), которая работает и
-сама по себе в любом Wayland-композиторе: шелл yami не нужен.
+без тулкитов. Часть рабочего стола [Nemo](https://github.com/HamzaAkramv15/nemo), которая работает и
+сама по себе в любом Wayland-композиторе: шелл nemo не нужен.
 
-| нейтральный вид (`plain`) | пиксельный вид (`yami`) |
+| нейтральный вид (`plain`) | пиксельный вид (`nemo`) |
 |---|---|
-| ![yami-view в нейтральном виде](.github/assets/plain.png) | ![yami-view в пиксельном виде](.github/assets/pixel.png) |
+| ![nemo-view в нейтральном виде](.github/assets/plain.png) | ![nemo-view в пиксельном виде](.github/assets/pixel.png) |
 
 ## Что умеет
 
@@ -17,7 +17,7 @@
 - По размеру окна, один к одному, увеличение к курсору с чёткими пикселями, перетаскивание; фон
   темы, чёрный или светлый, шахматка под прозрачными картинками.
 - Поворот, отражение, кадрирование, отмена; сохранить поверх или новым файлом (через диалог
-  yami-files, если он стоит).
+  nemo-files, если он стоит).
 - Слайд-шоу, весь экран, сведения о файле, копия в буфер обмена, в корзину, «сделать обоями».
 
 ## Установка
@@ -25,26 +25,26 @@
 **Один файл** (x86_64, glibc 2.34 или новее):
 
 ```sh
-curl -LO https://github.com/Trendorin/yami/releases/latest/download/yami-view
-chmod +x yami-view
-./yami-view install
+curl -LO https://github.com/HamzaAkramv15/nemo/releases/latest/download/nemo-view
+chmod +x nemo-view
+./nemo-view install
 ```
 
 Без Rust и root. `install` спросит язык, вид и открывать ли картинки в нём по умолчанию, покажет,
 что изменит, и запишет в `~/.local` только после твоего «да» (`--yes` берёт ответы по умолчанию,
 `--all` отвечает «да» на всё).
 
-**Из исходников** (Rust 1.89 или новее): `git clone https://github.com/Trendorin/yami-view`, затем
-`cargo build --release --locked` и `target/release/yami-view install`. Библиотека рисования yami-px
-приходит при сборке из репозитория [yami](https://github.com/Trendorin/yami).
+**Из исходников** (Rust 1.89 или новее): `git clone https://github.com/HamzaAkramv15/nemo-view`, затем
+`cargo build --release --locked` и `target/release/nemo-view install`. Библиотека рисования nemo-px
+приходит при сборке из репозитория [Nemo](https://github.com/HamzaAkramv15/nemo).
 
-Нужны wayland и libxkbcommon (`yami-view deps`); `yami-view uninstall` убирает всё обратно.
+Нужны wayland и libxkbcommon (`nemo-view deps`); `nemo-view uninstall` убирает всё обратно.
 
 ## Как пользоваться
 
 ```sh
-yami-view [ФАЙЛ|ПАПКА…]     # картинка и её папка, или папка с первой картинки
-yami-view shot -o ПАПКА     # окно в PNG без Wayland
+nemo-view [ФАЙЛ|ПАПКА…]     # картинка и её папка, или папка с первой картинки
+nemo-view shot -o ПАПКА     # окно в PNG без Wayland
 ```
 
 | Клавиши | |
@@ -58,7 +58,7 @@ yami-view shot -o ПАПКА     # окно в PNG без Wayland
 | W, E, Delete | сделать обоями, открыть папку, в корзину |
 | Esc, Ctrl+Q | закрыть |
 
-«Сделать обоями» вне рабочего стола yami запускает команду из `wallpaperCmd` в `style.json`, `{}` —
+«Сделать обоями» вне рабочего стола nemo запускает команду из `wallpaperCmd` в `style.json`, `{}` —
 это картинка: `"wallpaperCmd": "swww img {}"`, `"swaybg -m fill -i {}"` или что угодно другое. Путь
 уходит отдельным аргументом, никогда через оболочку.
 
@@ -70,12 +70,12 @@ yami-view shot -o ПАПКА     # окно в PNG без Wayland
 
 | Файл | Что |
 |---|---|
-| `~/.config/yami/style.json` | вид всех программ yami: тема пишется один раз, все её берут |
-| `~/.config/yami/style.view.json` | чем yami-view отличается (только эти ключи) |
+| `~/.config/nemo/style.json` | вид всех программ nemo: тема пишется один раз, все её берут |
+| `~/.config/nemo/style.view.json` | чем nemo-view отличается (только эти ключи) |
 
 | Ключ | Значения |
 |---|---|
-| `preset` | `plain` (нейтральный) или `yami` (пиксель-арт: целые пиксели, углы с вырезом, шрифт Tiny5 внутри бинаря) |
+| `preset` | `plain` (нейтральный) или `nemo` (пиксель-арт: целые пиксели, углы с вырезом, шрифт Tiny5 внутри бинаря) |
 | `palette`, `accent` | `blood`, `ash`, `sakura`, `amber`, `venom`, `ice`, `dusk`; или любой `#rrggbb`: остальная палитра строится от него |
 | `light` | `true` или `false`; нет ключа — как в системе |
 | `corners`, `radius` | `notch`, `round` или `square`; радиус в пикселях |
@@ -87,9 +87,9 @@ yami-view shot -o ПАПКА     # окно в PNG без Wayland
 | `lang` | `ru`, `en`, `pt-BR`, `es`, `de`, `fr`, `uk`, `pl`; пусто — как в системе |
 | `wallpaperCmd` | команда «сделать обоями», см. выше |
 
-Например, пиксельный вид в янтаре: `{ "preset": "yami", "palette": "amber" }`, или нейтральный
+Например, пиксельный вид в янтаре: `{ "preset": "nemo", "palette": "amber" }`, или нейтральный
 светлый с прямыми углами: `{ "preset": "plain", "light": true, "corners": "square" }`. В рабочем
-столе yami `style.json` пишет сам шелл; `style.view.json` всё равно главнее.
+столе nemo `style.json` пишет сам шелл; `style.view.json` всё равно главнее.
 
 ## Лицензия
 

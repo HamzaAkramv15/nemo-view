@@ -16,7 +16,7 @@ pub fn is_image(p: &Path) -> bool {
 pub fn siblings(p: &Path) -> Vec<PathBuf> {
     let dir = if p.is_dir() { p.to_path_buf() } else { p.parent().map(|d| d.to_path_buf()).unwrap_or_default() };
     let mut v: Vec<PathBuf> = std::fs::read_dir(&dir).map(|r| r.flatten().map(|e| e.path()).filter(|p| p.is_file() && is_image(p)).collect()).unwrap_or_default();
-    v.sort_by(|a, b| yami_px::paths::natural(&a.file_name().unwrap_or_default().to_string_lossy(), &b.file_name().unwrap_or_default().to_string_lossy()));
+    v.sort_by(|a, b| nemo_px::paths::natural(&a.file_name().unwrap_or_default().to_string_lossy(), &b.file_name().unwrap_or_default().to_string_lossy()));
     v
 }
 
@@ -129,13 +129,13 @@ pub fn save(pic: &Pic, to: &Path) -> Result<(), String> {
     std::fs::rename(&tmp, to).map_err(|e| e.to_string())
 }
 
-/// в корзину freedesktop: общая с yami-files (yami_px::trash: своя корзина на чужом диске — только
+/// в корзину freedesktop: общая с nemo-files (nemo_px::trash: своя корзина на чужом диске — только
 /// настоящая папка 0700, запись о файле создаётся первой и атомарно)
 pub fn trash(p: &Path) -> Result<(), String> {
-    match yami_px::trash::put(p) {
+    match nemo_px::trash::put(p) {
         Ok(_) => Ok(()),
-        Err(yami_px::trash::PutErr::NoTrash) => Err(crate::i18n::tr("корзина недоступна").to_string()),
-        Err(yami_px::trash::PutErr::Io(e)) => Err(e.to_string()),
+        Err(nemo_px::trash::PutErr::NoTrash) => Err(crate::i18n::tr("корзина недоступна").to_string()),
+        Err(nemo_px::trash::PutErr::Io(e)) => Err(e.to_string()),
     }
 }
 
@@ -157,7 +157,7 @@ mod tests {
     // каждое расширение из EXTS открывается: список и фичи image в Cargo.toml не расходятся
     #[test]
     fn every_listed_extension_opens() {
-        let dir = std::env::temp_dir().join(format!("yami-view-ext-{}", std::process::id()));
+        let dir = std::env::temp_dir().join(format!("nemo-view-ext-{}", std::process::id()));
         std::fs::create_dir_all(&dir).unwrap();
         let img = image::DynamicImage::ImageRgb8(image::RgbImage::from_fn(4, 4, |x, y| image::Rgb([x as u8 * 60, y as u8 * 60, 90])));
         for ext in EXTS {

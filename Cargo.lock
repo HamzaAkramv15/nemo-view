@@ -356,6 +356,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "nemo-px"
+version = "3.2.1"
+source = "git+https://github.com/HamzaAkramv15/nemo?tag=px-v3.2.1#d1a5b330edf59c37928ca1efc6b66bebb108218d"
+dependencies = [
+ "ab_glyph",
+ "image",
+ "libc",
+ "resvg",
+ "serde",
+ "serde_json",
+ "unicode-bidi",
+]
+
+[[package]]
+name = "nemo-view"
+version = "3.0.0"
+dependencies = [
+ "calloop",
+ "calloop-wayland-source",
+ "image",
+ "libc",
+ "nemo-px",
+ "smithay-client-toolkit",
+ "wayland-client",
+ "wayland-protocols",
+]
+
+[[package]]
 name = "num-traits"
 version = "0.2.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -920,34 +948,6 @@ name = "xmlwriter"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec7a2a501ed189703dba8b08142f057e887dfc4b2cc4db2d343ac6376ba3e0b9"
-
-[[package]]
-name = "yami-px"
-version = "3.2.0"
-source = "git+https://github.com/HamzaAkramv15/nemo?tag=px-v3.2.0#c8021fcb420d0c5d2be28c00becf152b6fe850fe"
-dependencies = [
- "ab_glyph",
- "image",
- "libc",
- "resvg",
- "serde",
- "serde_json",
- "unicode-bidi",
-]
-
-[[package]]
-name = "yami-view"
-version = "3.0.0"
-dependencies = [
- "calloop",
- "calloop-wayland-source",
- "image",
- "libc",
- "smithay-client-toolkit",
- "wayland-client",
- "wayland-protocols",
- "yami-px",
-]
 
 [[package]]
 name = "zlib-rs"

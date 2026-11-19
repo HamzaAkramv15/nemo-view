@@ -19,12 +19,12 @@ pub enum Act {
     Btn(&'static str),
 }
 
-impl yami_px::ui::Action for Act {
+impl nemo_px::ui::Action for Act {
     fn block() -> Self {
         Act::Block
     }
 }
-pub type Ui<'a, 'b> = yami_px::ui::Ui<'a, 'b, Act>;
+pub type Ui<'a, 'b> = nemo_px::ui::Ui<'a, 'b, Act>;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Fx {
@@ -86,9 +86,9 @@ impl V {
         self.toast = Some((s.into(), Instant::now()));
     }
     pub fn title(&self) -> String {
-        let n = self.path().and_then(|p| p.file_name()).map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "yami-view".into());
+        let n = self.path().and_then(|p| p.file_name()).map(|s| s.to_string_lossy().to_string()).unwrap_or_else(|| "nemo-view".into());
         let e = if self.pic().map(|p| p.edited).unwrap_or(false) { " •" } else { "" };
-        format!("{n}{e} — yami-view")
+        format!("{n}{e} — nemo-view")
     }
 
     /// текущая и соседние — всё, что держим декодированным
@@ -407,7 +407,7 @@ impl V {
             "wall" => self.wallpaper(),
             "folder" => {
                 if let Some(p) = self.path() {
-                    spawn(&["yami-files".into(), p.to_string_lossy().to_string()]);
+                    spawn(&["nemo-files".into(), p.to_string_lossy().to_string()]);
                 }
             }
             "trash" => self.trash(),

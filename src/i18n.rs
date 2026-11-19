@@ -1,13 +1,13 @@
 // Язык просмотрщика: надписи по-русски, английский по
 // таблице при отрисовке. Язык берётся из style.json.
 // Третий язык — бразильский португальский: таблица PT_BR (i18n_pt_br.rs) от английского, у tf! —
-// третий шаблон. Какой язык — решает yami_px::i18n (общий выбор для всех программ).
+// третий шаблон. Какой язык — решает nemo_px::i18n (общий выбор для всех программ).
 
 use std::collections::HashMap;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Mutex, OnceLock};
 
-pub use yami_px::i18n::{code, pt_br, set, translated};
+pub use nemo_px::i18n::{code, pt_br, set, translated};
 
 /// `shot`: собирать надписи, которые остались без перевода
 static AUDIT: AtomicBool = AtomicBool::new(false);
@@ -24,7 +24,7 @@ pub fn tr(s: &str) -> &str {
     // (остальные языки переводятся по частям: без строки — английская)
     let known = table().contains_key(s);
     // названия языков (Русский, Українська) не переводятся нарочно
-    let name = yami_px::i18n::LANGS.iter().any(|l| l.1 == s);
+    let name = nemo_px::i18n::LANGS.iter().any(|l| l.1 == s);
     // украинский сам кириллица: там выдаёт русский только буква, которой в нём нет (ы э ъ ё)
     let ru = if code() == "uk" { s.chars().any(|c| matches!(c, 'ы' | 'э' | 'ъ' | 'ё' | 'Ы' | 'Э' | 'Ё')) } else { s.chars().any(|c| matches!(c, 'а'..='я' | 'А'..='Я' | 'ё' | 'Ё')) };
     let missing = (!known && !name && ru) || (pt_br() && known && !lang_table().is_some_and(|t| t.contains_key(english)));
@@ -91,10 +91,10 @@ fn lang_table() -> Option<&'static HashMap<&'static str, &'static str>> {
 }
 
 /// строка tf! на языке без своего шаблона в коде: out собрана по английскому шаблону en, значения
-/// переезжают в шаблон языка (yami_px::i18n::refill); нет строки в таблице — остаётся английская
+/// переезжают в шаблон языка (nemo_px::i18n::refill); нет строки в таблице — остаётся английская
 pub fn localize(en: &str, out: String) -> String {
     match lang_table().and_then(|t| t.get(en)) {
-        Some(to) => yami_px::i18n::refill(en, &out, to).unwrap_or(out),
+        Some(to) => nemo_px::i18n::refill(en, &out, to).unwrap_or(out),
         None => out,
     }
 }

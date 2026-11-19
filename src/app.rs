@@ -87,7 +87,7 @@ pub struct App {
     dirty: bool,
     frame_pending: bool,
     anim: bool,
-    zones: Vec<yami_px::ui::Zone<Act>>,
+    zones: Vec<nemo_px::ui::Zone<Act>>,
     fonts: Fonts,
     icons: Icons,
     v: V,
@@ -99,7 +99,7 @@ pub struct App {
 pub fn run(mut v: V) {
     // из TTY или по ssh: понятная строка вместо паники
     let Ok(conn) = Connection::connect_to_env() else {
-        eprintln!("yami-view: no Wayland display (start it inside niri, or set WAYLAND_DISPLAY)");
+        eprintln!("nemo-view: no Wayland display (start it inside niri, or set WAYLAND_DISPLAY)");
         std::process::exit(1);
     };
     let (globals, mut queue) = registry_queue_init::<App>(&conn).expect("wayland registry");
@@ -134,7 +134,7 @@ pub fn run(mut v: V) {
                     }
                     let r = crate::pic::load(&p);
                     let _ = tx.send(Ev::Loaded(p, r));
-                    yami_px::trim_heap();
+                    nemo_px::trim_heap();
                 }
             }
         });
@@ -144,7 +144,7 @@ pub fn run(mut v: V) {
     let shm = Shm::bind(&globals, &qh).expect("wl_shm");
     let surface = compositor.create_surface(&qh);
     let window = xdg.create_window(surface, WindowDecorations::RequestServer, &qh);
-    window.set_app_id("yami-view");
+    window.set_app_id("nemo-view");
     window.set_title(v.title());
     window.set_min_size(Some((360, 260)));
     window.commit();
@@ -294,9 +294,9 @@ impl App {
                     let frames = vec![pic.frames[self.v.frame.min(pic.frames.len() - 1)].clone()];
                     let one = crate::pic::Pic { path: pic.path.clone(), frames, bytes: 0, format: pic.format.clone(), edited: true };
                     std::thread::spawn(move || {
-                        let o = std::process::Command::new("yami-files").args(["--pick", "save", "--name", &name, "--folder"]).arg(&dir).args(["--filter", "PNG|*.png", "--filter", "JPEG|*.jpg;*.jpeg", "--filter", "WebP|*.webp"]).output();
+                        let o = std::process::Command::new("nemo-files").args(["--pick", "save", "--name", &name, "--folder"]).arg(&dir).args(["--filter", "PNG|*.png", "--filter", "JPEG|*.jpg;*.jpeg", "--filter", "WebP|*.webp"]).output();
                         let Ok(o) = o else {
-                            let _ = tx.send(Ev::Saved(Err("yami-files?".into())));
+                            let _ = tx.send(Ev::Saved(Err("nemo-files?".into())));
                             return;
                         };
                         let Some(p) = String::from_utf8_lossy(&o.stdout).lines().next().map(PathBuf::from) else { return };
@@ -324,7 +324,7 @@ impl App {
         self.dirty = false;
         let (w, h) = (self.v.w, self.v.h);
         // HiDPI: буфер в физических пикселях, холст логический, увеличение ближайшим соседом
-        let (pw, ph) = if self.hidpi.is_none() || self.scale == 1.0 { (w, h) } else { yami_px::gfx::phys(w, h, self.scale) };
+        let (pw, ph) = if self.hidpi.is_none() || self.scale == 1.0 { (w, h) } else { nemo_px::gfx::phys(w, h, self.scale) };
         let up = (pw, ph) != (w, h);
         let need = (pw * ph * 4) as usize;
         if self.pool.as_ref().map(|p| p.len() < need).unwrap_or(true) {
@@ -348,7 +348,7 @@ impl App {
             self.anim = ui.anim;
         }
         if up {
-            yami_px::gfx::upscale(&scratch, w, h, unsafe { std::slice::from_raw_parts_mut(out_ptr, out_len) }, pw, ph);
+            nemo_px::gfx::upscale(&scratch, w, h, unsafe { std::slice::from_raw_parts_mut(out_ptr, out_len) }, pw, ph);
         }
         self.scratch = scratch;
         let surf = self.window.wl_surface().clone();
@@ -380,7 +380,7 @@ impl App {
         surf.commit();
     }
 
-    fn zone_at(&self, x: f64, y: f64) -> Option<yami_px::ui::Zone<Act>> {
+    fn zone_at(&self, x: f64, y: f64) -> Option<nemo_px::ui::Zone<Act>> {
         self.zones.iter().rev().find(|z| z.r.contains(x, y)).cloned()
     }
 
