@@ -358,7 +358,7 @@ dependencies = [
 [[package]]
 name = "nemo-px"
 version = "3.2.1"
-source = "git+https://github.com/HamzaAkramv15/nemo?tag=px-v3.2.1#d1a5b330edf59c37928ca1efc6b66bebb108218d"
+source = "git+https://github.com/HamzaAkramv15/nemo?tag=px-v3.2.1#b2da12d82e8805e0b6afd9781d5729202a335f09"
 dependencies = [
  "ab_glyph",
  "image",
