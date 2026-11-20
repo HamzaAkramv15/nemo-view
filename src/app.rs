@@ -578,7 +578,12 @@ impl App {
                 self.dirty = true;
             }
             PointerEventKind::Axis { vertical, .. } => {
-                let d = if vertical.value120 != 0 { vertical.value120 as f64 / 120.0 } else if vertical.discrete != 0 { vertical.discrete as f64 } else { vertical.absolute / 15.0 };
+                // щелчок колеса — как раньше; тачпад — пиксели: 60 пикселей движения пальца — как один щелчок (nemo_px::wheel)
+                let d = match nemo_px::wheel::scroll_of(vertical.discrete, vertical.value120, vertical.absolute) {
+                    Some(nemo_px::wheel::Scroll::Notches(n)) => n,
+                    Some(nemo_px::wheel::Scroll::Pixels(p)) => p / 60.0,
+                    None => 0.0,
+                };
                 if d.abs() < 0.01 {
                     return;
                 }
